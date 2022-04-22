@@ -1,16 +1,57 @@
-<html>
-<head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask chat app</title>
-</head>
-<body>
-    <h1 class="noMessage">No message yet</h1>
-    <div class="messages"></div>
-
-    <form action="" method="POST" class="form">
-      <input type="text" name="username" id="username" placeholder="Your name">
-      <input type="text" name="message" id="message" placeholder="Your message">
-      <input type="submit" value="Submit">
-    </form>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="flex flex-col h-screen w-screen bg-white">
+      <div class="messages h-96 flex flex-col mt-2 flex-col overflow-y-scroll space-y-3 mb-8 pb-3 ">
+        <!-- <div class="w-max ml-auto break-all mt-2 mb-1 p-2 rounded-br-none bg-blue-500 rounded-2xl text-white text-left mr-5">
+          Words can't describe how beautiful you are :)
+        </div>  -->
+      </div>
+      <form class="form flex flex-row items-center bottom-0 my-2 w-full">
+        <div
+          class="ml-2 flex flex-row border-gray items-center w-full border rounded-3xl h-12 px-2"
+        >
+          <div class="w-full ml-2">
+            <input type="hidden" name="username" value="Axiol">
+            <input
+              type="text"
+              id="message"
+              name="message"
+              class="border rounded-2xl border-transparent w-full focus:outline-none text-sm h-10 flex items-center"
+              placeholder="Type your message...."
+            />
+          </div>
+        </div>
+        <div class="ml-3">
+            <button
+              id="self"
+              class="flex items-center justify-center h-10 w-10 mr-2 rounded-full bg-gray-200 hover:bg-gray-300 text-indigo-800 text-white focus:outline-none"
+            >
+              <svg
+                class="w-5 h-5 transform rotate-90 -mr-px"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                ></path>
+              </svg>
+          </button>
+        </div>
+      </form>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
     <script type="text/javascript">
@@ -41,9 +82,12 @@
             document.querySelector('.noMessage').remove();
           }
           const messages = document.querySelector('.messages');
-          messages.insertAdjacentHTML('beforeend', `<p><strong>${msg.user_name}</strong>: ${msg.message}</p>`)
+          messages.insertAdjacentHTML('beforeend', `<div class="mr-auto">
+            <div class="other break-all mt-2 ml-5 rounded-bl-none float-none bg-gray-300 rounded-2xl p-2">${msg.message}</div>
+            <p class="ml-5 text-sm text-neutral-500">${msg.user_name}</p>
+          </div>`)
         }
       })
     </script>
-</body>
+  </body>
 </html>
