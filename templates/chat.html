@@ -1,0 +1,49 @@
+<html>
+<head>
+    <title>Flask chat app</title>
+</head>
+<body>
+    <h1 class="noMessage">No message yet</h1>
+    <div class="messages"></div>
+
+    <form action="" method="POST" class="form">
+      <input type="text" name="username" id="username" placeholder="Your name">
+      <input type="text" name="message" id="message" placeholder="Your message">
+      <input type="submit" value="Submit">
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <script type="text/javascript">
+      const socket = io.connect(`http://${document.domain}:${location.port}`);
+
+      socket.on('connect', () => {
+        socket.emit('my event', {
+          data: 'User connected'
+        });
+      });
+
+      const form = document.querySelector('.form');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        socket.emit('my event', {
+          user_name: formData.get('username'),
+          message: formData.get('message')
+        });
+      });
+
+      socket.on('my response', (msg) => {
+        console.log(msg);
+
+        if(typeof msg.user_name !== 'undefined') {
+          if(document.querySelector('.noMessage')) {
+            document.querySelector('.noMessage').remove();
+          }
+          const messages = document.querySelector('.messages');
+          messages.insertAdjacentHTML('beforeend', `<p><strong>${msg.user_name}</strong>: ${msg.message}</p>`)
+        }
+      })
+    </script>
+</body>
+</html>
