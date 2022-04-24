@@ -96,6 +96,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
     <script type="text/javascript">
       const usernameField = document.getElementById('username');
+      const messageField = document.getElementById('message');
       const messages = document.querySelector('.messages');
       const form = document.querySelector('.form');
       const formUsername = document.querySelector('.formUsername');
@@ -145,6 +146,8 @@
         e.preventDefault();
         const formData = new FormData(form);
 
+        messageField.value = ''
+
         socket.emit('my event', {
           user_name: formData.get('username'),
           message: formData.get('message')
@@ -154,10 +157,17 @@
       // Intercept the event to display new messages.
       socket.on('my response', (msg) => {
         if(typeof msg.user_name !== 'undefined') {
-          messages.insertAdjacentHTML('beforeend', `<div class="mr-auto">
-            <div class="other break-all mt-2 ml-5 rounded-bl-none float-none bg-gray-300 rounded-2xl p-2">${msg.message}</div>
-            <p class="ml-5 text-sm text-neutral-500">${msg.user_name}</p>
-          </div>`)
+          if(msg.user_name !== usernameField.value) {
+            messages.insertAdjacentHTML('beforeend', `<div class="mr-auto">
+              <div class="other break-all mt-2 ml-5 rounded-bl-none float-none bg-gray-300 rounded-2xl p-2">${msg.message}</div>
+              <p class="ml-5 text-sm text-neutral-500">${msg.user_name}</p>
+            </div>`)
+          } else {
+            messages.insertAdjacentHTML('beforeend', `<div class="ml-auto">
+              <div class="break-all mt-2 p-2 rounded-br-none bg-blue-500 rounded-2xl text-white text-left mr-5">${msg.message}</div>
+              <p class="ml-5 text-sm text-neutral-500">${msg.user_name}</p>
+            </div>`)
+          }
         }
       })
     </script>
